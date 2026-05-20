@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
+import joblib
 import io
 import os
 from sklearn.ensemble import RandomForestClassifier
@@ -359,8 +360,7 @@ def assign_label(row):
 @st.cache_resource(show_spinner=False)
 def load_model():
     if os.path.exists(MODEL_PATH):
-        with open(MODEL_PATH, 'rb') as f:
-            return pickle.load(f)
+    return joblib.load(MODEL_PATH)
     # Train fresh
     if not os.path.exists(DATA_PATH):
         return None
@@ -371,11 +371,10 @@ def load_model():
     df['label'] = df.apply(assign_label, axis=1)
     X = df[FEATURES]; y = df['label']
     X_tr, _, y_tr, _ = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-    model = RandomForestClassifier(n_estimators=200, random_state=42, max_depth=10, min_samples_leaf=5)
-    model.fit(X_tr, y_tr)
-    os.makedirs('models', exist_ok=True)
-    with open(MODEL_PATH, 'wb') as f:
-        pickle.dump(model, f)
+model = RandomForestClassifier(n_estimators=20, random_state=42, max_depth=9, min_samples_leaf=20)
+model.fit(X_tr, y_tr)
+os.makedirs('models', exist_ok=True)
+joblib.dump(model, MODEL_PATH, compress=('lzma', 9))
     return model
 
 
