@@ -334,8 +334,9 @@ FEATURE_LABELS = {
     'skor_menalar': 'Skor Menalar',
     'skor_literasi': 'Skor Literasi'
 }
-MODEL_PATH = 'models/model_olimpmath.pkl'
-DATA_PATH  = 'data/dataset.xlsx'
+BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, 'models', 'model_olimpmath.pkl')
+DATA_PATH  = os.path.join(BASE_DIR, 'data', 'dataset.xlsx')
 
 
 # ─────────────────────────────────────────────
